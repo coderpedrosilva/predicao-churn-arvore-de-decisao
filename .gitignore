@@ -1,2 +1,15 @@
-# Dados gerados automaticamente
+# Ambientes
+.venv/
+venv/
+__pycache__/
+
+# Dados e artefatos gerados
 data/
+images/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# SO
+.DS_Store
+Thumbs.db
