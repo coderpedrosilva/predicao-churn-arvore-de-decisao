@@ -146,10 +146,15 @@ O modelo é avaliado utilizando:
 ## 🚀 Diferenciais do Projeto
 
 ✔ Pipeline automatizado (sem notebooks)
+
 ✔ Código modular e organizado
+
 ✔ Dados gerados por script (reprodutibilidade)
+
 ✔ Visualização do modelo aprendido
+
 ✔ Estrutura profissional para portfólio
+
 ✔ Fácil extensão para outros algoritmos
 
 ---
