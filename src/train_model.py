@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
@@ -7,6 +8,11 @@ from sklearn.metrics import accuracy_score, confusion_matrix, classification_rep
 # Caminho até a raiz do projeto
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_PATH = os.path.join(BASE_DIR, "data", "churn_synthetic.csv")
+
+# Diretório e caminho do modelo (para a API)
+API_DIR = os.path.join(BASE_DIR, "api")
+os.makedirs(API_DIR, exist_ok=True)
+MODEL_PATH = os.path.join(API_DIR, "model.joblib")
 
 # 1️⃣ Carregar dados
 df = pd.read_csv(DATA_PATH)
@@ -55,3 +61,9 @@ print(classification_report(
     y_pred,
     target_names=["Cliente Ativo", "Cliente em Evasão"]
 ))
+
+# =========================
+# Persistir modelo treinado
+# =========================
+joblib.dump(model, MODEL_PATH)
+print(f"\nModelo salvo para a API em: {MODEL_PATH}")
