@@ -54,17 +54,31 @@ def predict(cliente: ClienteInput):
 
     prob = model.predict_proba(X)[0][1]
 
-    motivos = []
-    if cliente.chamadas_suporte >= 3: motivos.append("Muitas chamadas ao suporte")
-    if cliente.pagamentos_atrasados >= 2: motivos.append("Pagamentos atrasados frequentes")
-    if cliente.tipo_contrato == "mensal": motivos.append("Contrato mensal")
-    if cliente.tempo_contrato_meses < 12: motivos.append("Pouco tempo de contrato")
-    if cliente.renovacao_automatica == 0: motivos.append("Sem renovação automática")
+    riscos = []
+    protecao = []
+
+    if cliente.chamadas_suporte >= 3: riscos.append("Muitas chamadas ao suporte")
+    else: protecao.append("Baixo número de chamadas ao suporte")
+
+    if cliente.pagamentos_atrasados >= 2: riscos.append("Pagamentos atrasados frequentes")
+    else: protecao.append("Pagamentos em dia")
+
+    if cliente.tipo_contrato == "mensal": riscos.append("Contrato mensal")
+    else: protecao.append("Contrato anual")
+
+    if cliente.tempo_contrato_meses < 12: riscos.append("Pouco tempo de contrato")
+    else: protecao.append("Alto tempo de contrato")
+
+    if cliente.renovacao_automatica == 0: riscos.append("Sem renovação automática")
+    else: protecao.append("Renovação automática ativa")
+
+    if cliente.desconto == 1: protecao.append("Possui desconto")
 
     return {
         "probabilidade_churn": round(float(prob), 2),
         "classe": "Cliente em Evasão" if prob >= 0.5 else "Cliente Ativo",
-        "motivos": motivos
+        "riscos": riscos,
+        "protecao": protecao
     }
 
 # =========================
@@ -93,12 +107,25 @@ def listar_clientes(ordenar: str = "desc", somente_risco: bool = False):
 
         prob = model.predict_proba(X)[0][1]
 
-        motivos = []
-        if row["chamadas_suporte"] >= 3: motivos.append("Muitas chamadas ao suporte")
-        if row["pagamentos_atrasados"] >= 2: motivos.append("Pagamentos atrasados frequentes")
-        if row["tipo_contrato"] == "mensal": motivos.append("Contrato mensal")
-        if row["tempo_contrato_meses"] < 12: motivos.append("Pouco tempo de contrato")
-        if row["renovacao_automatica"] == 0: motivos.append("Sem renovação automática")
+        riscos = []
+        protecao = []
+
+        if row["chamadas_suporte"] >= 3: riscos.append("Muitas chamadas ao suporte")
+        else: protecao.append("Baixo número de chamadas ao suporte")
+
+        if row["pagamentos_atrasados"] >= 2: riscos.append("Pagamentos atrasados frequentes")
+        else: protecao.append("Pagamentos em dia")
+
+        if row["tipo_contrato"] == "mensal": riscos.append("Contrato mensal")
+        else: protecao.append("Contrato anual")
+
+        if row["tempo_contrato_meses"] < 12: riscos.append("Pouco tempo de contrato")
+        else: protecao.append("Alto tempo de contrato")
+
+        if row["renovacao_automatica"] == 0: riscos.append("Sem renovação automática")
+        else: protecao.append("Renovação automática ativa")
+
+        if row["desconto"] == 1: protecao.append("Possui desconto")
 
         classe = "Cliente em Evasão" if prob >= 0.5 else "Cliente Ativo"
 
@@ -109,7 +136,8 @@ def listar_clientes(ordenar: str = "desc", somente_risco: bool = False):
             "cliente": f"Cliente {i+1}",
             "probabilidade": round(float(prob), 2),
             "classe": classe,
-            "motivos": motivos
+            "riscos": riscos,
+            "protecao": protecao
         })
 
     resultados = sorted(resultados, key=lambda x: x["probabilidade"], reverse=(ordenar == "desc"))
