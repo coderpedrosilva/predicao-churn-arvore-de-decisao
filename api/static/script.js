@@ -23,9 +23,15 @@ function verDetalhes(cliente){
     html += `<p><b>Classe:</b> ${cliente.classe}</p>`;
     html += `<p><b>Risco:</b> ${(cliente.probabilidade * 100).toFixed(0)}%</p>`;
 
-    if(cliente.motivos.length){
-        html += "<b>Motivos:</b><ul>";
-        cliente.motivos.forEach(m => html += `<li>${m}</li>`);
+    if(cliente.riscos.length){
+        html += "<h4 style='color:#dc3545'>Fatores de Risco</h4><ul>";
+        cliente.riscos.forEach(m => html += `<li>${m}</li>`);
+        html += "</ul>";
+    }
+
+    if(cliente.protecao.length){
+        html += "<h4 style='color:#198754'>Fatores de Proteção</h4><ul>";
+        cliente.protecao.forEach(m => html += `<li>${m}</li>`);
         html += "</ul>";
     }
 
@@ -36,4 +42,3 @@ function verDetalhes(cliente){
 function fecharModal(){
     document.getElementById("modal").style.display = "none";
 }
-
